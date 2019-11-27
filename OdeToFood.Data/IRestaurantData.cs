@@ -10,6 +10,8 @@ namespace OdeToFood.Data
     {
         IEnumerable<Restaurant> GetRestaurantsByName(string name);
         Restaurant GetById(int id);
+        Restaurant Update(Restaurant updatedRestaurant);
+        int Commit();
     }
 
     public class InMemoryRestaurantData : IRestaurantData
@@ -25,6 +27,8 @@ namespace OdeToFood.Data
                 new Restaurant {Id=3, Name="Peri Peri", Location = "High Wycombe", Cuisine = CuisineType.Indian},
             };
         }
+
+
 
         //Detail page: gets the restaurant by Id
         public Restaurant GetById(int id)
@@ -49,6 +53,24 @@ namespace OdeToFood.Data
                     .OrderBy(n => n.Name)
                         .ToList();
             }
+        }
+
+        //Edit page: Model binding an HTTP POST
+        public Restaurant Update(Restaurant updatedRestaurant)
+        {
+            var restaurant = restaurants.SingleOrDefault(i =>i.Id == updatedRestaurant.Id);
+            if (restaurant != null)
+            {
+                restaurant.Name = updatedRestaurant.Name;
+                restaurant.Location = updatedRestaurant.Location;
+                restaurant.Cuisine = updatedRestaurant.Cuisine;
+            }
+            return restaurant;
+        }
+
+        public int Commit()
+        {
+            return 0;
         }
     }
 }
