@@ -11,6 +11,7 @@ namespace OdeToFood.Data
         IEnumerable<Restaurant> GetRestaurantsByName(string name);
         Restaurant GetById(int id);
         Restaurant Update(Restaurant updatedRestaurant);
+        Restaurant Add(Restaurant newRestaurant);
         int Commit();
     }
 
@@ -66,6 +67,14 @@ namespace OdeToFood.Data
                 restaurant.Cuisine = updatedRestaurant.Cuisine;
             }
             return restaurant;
+        }
+
+        //Create page which is part of Edit page: 
+        public Restaurant Add(Restaurant newRestaurant)
+        {
+            this.restaurants.Add(newRestaurant);
+            newRestaurant.Id = restaurants.Max(i => i.Id) + 1;
+            return newRestaurant;
         }
 
         public int Commit()

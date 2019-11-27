@@ -27,11 +27,19 @@ namespace OdeToFood.Pages.Restaurants
         public Restaurant Restaurant { get; set; }
         public IEnumerable<SelectListItem> Cuisines { get; set; }
 
-        public IActionResult OnGet(int restaurantId)
+        public IActionResult OnGet(int? restaurantId)
         {
             //Get all enums
             this.Cuisines = htmlHelper.GetEnumSelectList<CuisineType>();
-            this.Restaurant = restaurantData.GetById(restaurantId);
+            if (restaurantId.HasValue)
+            {
+                this.Restaurant = restaurantData.GetById(restaurantId.Value);
+            }
+            else
+            {
+                this.Restaurant = new Restaurant();
+            }
+
             if (Restaurant == null)
             {
                 return RedirectToPage("./NotFound");
@@ -42,17 +50,28 @@ namespace OdeToFood.Pages.Restaurants
         //Model binding an HTTP POST
         public IActionResult OnPost()
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+            {
+                this.Cuisines = htmlHelper.GetEnumSelectList<CuisineType>();
+                return Page();
+            }
+
+            if (this.Restaurant.Id > 0)
             {
                 this.restaurantData.Update(Restaurant);
-                this.restaurantData.Commit();
-                //When the Save button is clicked it is redirect to detail page and pass Id
-                //because Detail page needs Id parameter.
-                return RedirectToPage("./Detail", new { restaurantId = Restaurant.Id });
             }
-            this.Cuisines = htmlHelper.GetEnumSelectList<CuisineType>();
+            else
+            {
+                this.restaurantData.Add(Restaurant);
+            }
+            this.restaurantData.Commit();
 
-            return Page();
+            //Message which says that restaurant is saved.
+            TempData["Message"] = "Restaurant saved!";
+
+            //When the Save button is clicked it is redirect to detail page and pass Id
+            //because Detail page needs Id parameter.
+            return RedirectToPage("./Detail", new { restaurantId = Restaurant.Id });
         }
     }
 }
