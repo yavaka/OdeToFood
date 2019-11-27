@@ -6,6 +6,7 @@
 
 <h1>Restaurants</h1>
 
+<!--Search bar-->
 <form method="get">
     <div class="form-group">
         <div class="input-group">
@@ -32,6 +33,12 @@
             <td>@restaurant.Name</td>
             <td>@restaurant.Location</td>
             <td>@restaurant.Cuisine</td>
+            <!--Linking to the Details-->
+            <td>
+                <a class="btn btn-lg" asp-page="./Detail" asp-route-restaurantId="@restaurant.Id">
+                    <i class="glyphicon glyphicon-zoom-in"></i>
+                </a>
+            </td>
         </tr>
     }
 
