@@ -42,8 +42,16 @@ namespace OdeToFood.Pages.Restaurants
         //Model binding an HTTP POST
         public IActionResult OnPost()
         {
-            restaurantData.Update(Restaurant);
-            restaurantData.Commit();
+            if (ModelState.IsValid)
+            {
+                this.restaurantData.Update(Restaurant);
+                this.restaurantData.Commit();
+                //When the Save button is clicked it is redirect to detail page and pass Id
+                //because Detail page needs Id parameter.
+                return RedirectToPage("./Detail", new { restaurantId = Restaurant.Id });
+            }
+            this.Cuisines = htmlHelper.GetEnumSelectList<CuisineType>();
+
             return Page();
         }
     }
