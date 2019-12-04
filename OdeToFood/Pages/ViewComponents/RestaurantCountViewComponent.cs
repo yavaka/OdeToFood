@@ -19,7 +19,7 @@ namespace OdeToFood.Pages.ViewComponents
         public IViewComponentResult Invoke()
         {
             var count = this._restaurantData.GetCountOfRestaurants();
-            return View("count",count);
+            return View(count);
         }
     }
 }
