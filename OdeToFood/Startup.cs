@@ -58,6 +58,8 @@ namespace OdeToFood
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            //Custom middleware
+            app.Use(SayHelloMiddleware);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -65,6 +67,23 @@ namespace OdeToFood
             app.UseCookiePolicy();
 
             app.UseMvc();
+        }
+
+        //Custom middleware
+        private RequestDelegate SayHelloMiddleware(RequestDelegate nextMiddleware)
+        {
+            return async ctx =>
+            {
+                if (ctx.Request.Path.StartsWithSegments("/middleware"))
+                {
+
+                    await ctx.Response.WriteAsync("Test of custom middleware.");
+                }
+                else
+                {
+                    await nextMiddleware(ctx);
+                }
+            };
         }
     }
 }
