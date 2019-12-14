@@ -33,6 +33,7 @@ namespace OdeToFood
             });
 
             services.AddScoped<IRestaurantData, SqlRestaurantData>();
+            
 
             services.Configure<CookiePolicyOptions>(options =>
             {
